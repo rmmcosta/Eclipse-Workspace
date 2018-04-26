@@ -1,7 +1,0 @@
-package onemore;
-
-public class onemoretest {
-	static String printThings() {
-		return "Hello from the one more test";
-	}
-}
