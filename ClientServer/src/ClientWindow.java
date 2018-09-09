@@ -18,10 +18,13 @@ public class ClientWindow {
 	Client connection;
 	JTextArea history;
 	JTextPane myMessage;
-	private JTextField textField;
+	private JTextField inputPort;
 	private JLabel lblPort;
 	JButton btnSend;
 	JLabel lblConnected;
+	private JTextField inputName;
+	private JLabel lblName;
+	private JButton btnClear;
 
 	/**
 	 * Launch the application.
@@ -83,7 +86,8 @@ public class ClientWindow {
 		frame.getContentPane().add(btnSend);
 
 		inputServerIP = new JTextField();
-		inputServerIP.setBounds(10, 28, 232, 20);
+		inputServerIP.setText("192.168.1.7");
+		inputServerIP.setBounds(10, 28, 116, 20);
 		frame.getContentPane().add(inputServerIP);
 		inputServerIP.setColumns(10);
 
@@ -103,7 +107,7 @@ public class ClientWindow {
 				}
 			}
 		});
-		btnConnect.setBounds(330, 27, 89, 23);
+		btnConnect.setBounds(194, 27, 89, 23);
 		frame.getContentPane().add(btnConnect);
 
 		lblConnected = new JLabel("Disconnected");
@@ -111,19 +115,39 @@ public class ClientWindow {
 		lblConnected.setBounds(147, 77, 74, 20);
 		frame.getContentPane().add(lblConnected);
 
-		textField = new JTextField();
-		textField.setBounds(263, 28, 46, 20);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		inputPort = new JTextField();
+		inputPort.setText("80");
+		inputPort.setBounds(136, 28, 46, 20);
+		frame.getContentPane().add(inputPort);
+		inputPort.setColumns(10);
 
 		lblPort = new JLabel("Port");
-		lblPort.setBounds(263, 11, 46, 14);
+		lblPort.setBounds(136, 11, 46, 14);
 		frame.getContentPane().add(lblPort);
+
+		inputName = new JTextField();
+		inputName.setText("John Doe");
+		inputName.setBounds(10, 77, 86, 20);
+		frame.getContentPane().add(inputName);
+		inputName.setColumns(10);
+
+		lblName = new JLabel("Name");
+		lblName.setBounds(10, 60, 46, 14);
+		frame.getContentPane().add(lblName);
+		
+		btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				history.setText("");
+			}
+		});
+		btnClear.setBounds(367, 343, 74, 23);
+		frame.getContentPane().add(btnClear);
 	}
 
 	private void SetConnection() throws Exception {
 		try {
-			connection = new Client(inputServerIP.getText(), 80);
+			connection = new Client(inputServerIP.getText(), Integer.parseInt(inputPort.getText()));
 			myMessage.setEnabled(true);
 			history.setEnabled(true);
 			btnSend.setEnabled(true);
@@ -147,10 +171,9 @@ public class ClientWindow {
 	}
 
 	private void SendMessage() throws Exception {
-		String msg = myMessage.getText();
+		String msg = inputName.getText() + ":" + myMessage.getText();
 		try {
 			connection.Send(msg);
-			history.append("me:" + msg + "\n");
 			myMessage.setText("");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -163,7 +186,7 @@ public class ClientWindow {
 		try {
 			while (true) {
 				msg = connection.ReadMode();
-				history.append(inputServerIP.getText() + ":" + msg + "\n");
+				history.append(msg + "\n");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

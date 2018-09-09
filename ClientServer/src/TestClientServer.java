@@ -17,7 +17,7 @@ public class TestClientServer {
 		case "server":
 			try {
 				Server server = new Server(Integer.parseInt(args[1]));
-				server.EchoMode();
+				server.ManageConnections();
 			} catch (NumberFormatException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
